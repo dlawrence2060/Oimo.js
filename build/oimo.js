@@ -6059,7 +6059,7 @@
 
 	    testWakeUp: function(){
 
-	        if( this.linearVelocity.testZero() || this.angularVelocity.testZero() || this.position.testDiff( this.sleepPosition ) || this.orientation.testDiff( this.sleepOrientation )) this.awake(); // awake the body
+	        if( this.linearVelocity.testZero() || this.angularVelocity.testZero()) this.awake(); // awake the body
 
 	    },
 
