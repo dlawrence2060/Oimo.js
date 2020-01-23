@@ -9,9 +9,9 @@ function Pair(s1, s2) {
     // The second shape.
     this.shape2 = s2 || null;
 
-    s1.parent.collisionListeners.forEach((callback) => {
-        callback(s2.parent.collisionObject);
-    });
+    // s1.parent.collisionListeners.forEach((callback) => {
+    //     callback(s2.parent.collisionObject);
+    // });
 };
 
 export { Pair };
