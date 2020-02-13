@@ -461,7 +461,7 @@ Object.assign(World.prototype, {
     /**
     * I will proceed only time step seconds time of World.
     */
-    step: function () {
+    step: function (deltaTime) {
 
         var stat = this.isStat;
 
@@ -594,18 +594,18 @@ Object.assign(World.prototype, {
 
             if (base.isLonely()) {// update single body
                 if (base.isDynamic) {
-                    base.linearVelocity.addScaledVector(this.gravity, this.timeStep);
+                    base.linearVelocity.addScaledVector(this.gravity, this.timeStep * deltaTime);
                     /*base.linearVelocity.x+=this.gravity.x*this.timeStep;
                     base.linearVelocity.y+=this.gravity.y*this.timeStep;
                     base.linearVelocity.z+=this.gravity.z*this.timeStep;*/
                 }
                 if (this.callSleep(base)) {
-                    base.sleepTime += this.timeStep;
+                    base.sleepTime += this.timeStep * deltaTime;
                     if (base.sleepTime > 0.5) base.sleep();
-                    else base.updatePosition(this.timeStep);
+                    else base.updatePosition(this.timeStep * deltaTime);
                 } else {
                     base.sleepTime = 0;
-                    base.updatePosition(this.timeStep);
+                    base.updatePosition(this.timeStep * deltaTime);
                 }
                 this.numIslands++;
                 continue;
@@ -663,7 +663,7 @@ Object.assign(World.prototype, {
             } while (stackCount != 0);
 
             // update velocities
-            var gVel = new Vec3().addScaledVector(this.gravity, this.timeStep);
+            var gVel = new Vec3().addScaledVector(this.gravity, this.timeStep * deltaTime);
             /*var gx=this.gravity.x*this.timeStep;
             var gy=this.gravity.y*this.timeStep;
             var gz=this.gravity.z*this.timeStep;*/
@@ -698,7 +698,7 @@ Object.assign(World.prototype, {
             j = islandNumConstraints;
             while (j--) {
                 //for(j=0, l=islandNumConstraints; j<l; j++){
-                this.islandConstraints[j].preSolve(this.timeStep, invTimeStep);// pre-solve
+                this.islandConstraints[j].preSolve(this.timeStep * deltaTime, invTimeStep);// pre-solve
             }
             var k = this.numIterations;
             while (k--) {
@@ -724,7 +724,7 @@ Object.assign(World.prototype, {
                 //for(j=0, l=islandNumRigidBodies;j<l;j++){
                 body = this.islandRigidBodies[j];
                 if (this.callSleep(body)) {
-                    body.sleepTime += this.timeStep;
+                    body.sleepTime += this.timeStep * deltaTime;
                     if (body.sleepTime < sleepTime) sleepTime = body.sleepTime;
                 } else {
                     body.sleepTime = 0;
@@ -745,7 +745,7 @@ Object.assign(World.prototype, {
                 j = islandNumRigidBodies;
                 while (j--) {
                     //for(j=0, l=islandNumRigidBodies;j<l;j++){
-                    this.islandRigidBodies[j].updatePosition(this.timeStep);
+                    this.islandRigidBodies[j].updatePosition(this.timeStep * deltaTime);
                     this.islandRigidBodies[j] = null;// gc
                 }
             }
